@@ -2,11 +2,11 @@ package com.techhounds.lib.util;
 
 public class HoundMath {
 
-	public double checkRange(double value) {
+	public static double checkRange(double value) {
 		return checkRange(value, -1, 1);
 	}
 
-	public double checkRange(double value, double min, double max) {
+	public static double checkRange(double value, double min, double max) {
 		if(value < min)
 			return min;
 		else if(value > max)
