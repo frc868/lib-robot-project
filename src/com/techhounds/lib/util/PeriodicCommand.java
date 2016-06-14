@@ -22,7 +22,7 @@ public abstract class PeriodicCommand extends Command {
 		isFinished = false;
 		init();
 		timer = new Timer();
-        timer.scheduleAtFixedRate(new Action(), 0, (long) ((1 / FREQUENCY) * 1000)); 
+		timer.scheduleAtFixedRate(new Action(), 0, (long) ((1 / FREQUENCY) * 1000)); 
 	}
 
 	@Override
