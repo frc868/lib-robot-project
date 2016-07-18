@@ -5,7 +5,15 @@ public class HoundMath {
 	public static double checkRange(double value) {
 		return checkRange(value, -1, 1);
 	}
+	
+	public static double d2r(double degrees) {
+		return degrees * Math.PI / 180.0;
+	}
 
+	public static double r2d(double radians) {
+		return radians * 180.0 / Math.PI;
+	}
+	
 	public static double checkRange(double value, double min, double max) {
 		if(value < min)
 			return min;

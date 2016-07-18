@@ -132,21 +132,21 @@ public class ControllerMap {
 		return checkDeadZone(joystick.getRawAxis(buttonPorts[direction]));
 	}
 	
-	public Button getButton(Integer buttonID) {
-		if(buttons.get(buttonID) == null) {
-			if(DPadButton.isDPADButton(buttonID))
-				buttons.put(buttonID, new DPadButton(joystick, buttonID));
+	public Button getButton(int collector_OUT) {
+		if(buttons.get(collector_OUT) == null) {
+			if(DPadButton.isDPADButton(collector_OUT))
+				buttons.put(collector_OUT, new DPadButton(joystick, collector_OUT));
 			else if((type == Type.XBOX_ONE || type == Type.XBOX_360) && 
-					(buttonID == Key.LT  || buttonID == Key.RT))
-				buttons.put(buttonID, new TriggerButton(joystick, buttonID));
+					(collector_OUT == Key.LT  || collector_OUT == Key.RT))
+				buttons.put(collector_OUT, new TriggerButton(joystick, collector_OUT));
 			else
-				buttons.put(buttonID, new JoystickButton(joystick, buttonPorts[buttonID]));
+				buttons.put(collector_OUT, new JoystickButton(joystick, buttonPorts[collector_OUT]));
 		}
 		
 		//if(!DPadButton.isDPADButton(buttonID))
 		//	SmartDashboard.putNumber("Button Selected " + buttonID, buttonPorts[buttonID]);
 		
-		return buttons.get(buttonID);
+		return buttons.get(collector_OUT);
 	}
 	
 	public Button getMultiButton(Integer... buttonID) {
