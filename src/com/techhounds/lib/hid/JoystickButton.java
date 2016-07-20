@@ -1,25 +1,22 @@
 package com.techhounds.lib.hid;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.command.Command;
-
 /**
  * Implement our own Joystick Button class based on our custom Button class
  * @author Atif Niyaz
  */
 public class JoystickButton extends Button {
 
-	protected GenericHID joystick;
+	protected ControllerMap controllerMap;
 	protected int buttonNumber;
 	protected boolean off;
 	
-	protected JoystickButton(GenericHID joystick) {
-		this.joystick = joystick;
+	protected JoystickButton(ControllerMap joystick) {
+		this.controllerMap = joystick;
 		this.off = false;
 	}
 
-	public JoystickButton(GenericHID joystick, int buttonNumber) {
-		this.joystick = joystick;
+	public JoystickButton(ControllerMap joystick, int buttonNumber) {
+		this.controllerMap = joystick;
 		this.buttonNumber = buttonNumber;
 		this.off = false;
 	}
@@ -37,7 +34,12 @@ public class JoystickButton extends Button {
 		if(off)
 			return false;
 		
-		return joystick.getRawButton(buttonNumber);
+		if(controllerMap.getMultiButton(buttonNumber) != null) {
+			if(controllerMap.getMultiButton(buttonNumber).get())
+				return false;
+		}
+		
+		return controllerMap.getJoystick().getRawButton(buttonNumber);
 	}
 }
 

@@ -23,7 +23,7 @@ public class Trajectory {
 			
 		}
 		
-		public Segment(double pos, double vel, double acc, double jerk, double heading, double dt, double x, double y) {
+		public Segment(double dt, double x, double y, double pos, double vel, double acc, double jerk, double heading) {
 			this.pos = pos;
 			this.vel = vel;
 			this.acc = acc;
@@ -32,6 +32,10 @@ public class Trajectory {
 			this.dt = dt;
 			this.x = x;
 			this.y = y;
+		}
+		
+		public String toString() {
+			return dt + " " + x + " " + y + " " + pos + " " + vel + " " + acc + " " + jerk + " " + heading;
 		}
 	}
 	

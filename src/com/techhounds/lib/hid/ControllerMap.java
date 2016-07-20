@@ -1,6 +1,5 @@
 package com.techhounds.lib.hid;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.techhounds.lib.util.HoundMath;
@@ -11,7 +10,7 @@ import edu.wpi.first.wpilibj.Joystick.RumbleType;
 public class ControllerMap {
 	
 	private HashMap<Integer, JoystickButton> buttons;
-	private ArrayList<MultiButton> multiButtons;
+	private HashMap<Integer, MultiButton> multiButtons;
 	
 	private Joystick joystick;
 	private Type type;
@@ -49,7 +48,7 @@ public class ControllerMap {
 	public ControllerMap(Joystick joystick, Type type) {
 		this.joystick = joystick;
 		buttons = new HashMap<>();
-		multiButtons = new ArrayList<>();
+		multiButtons = new HashMap<>();
 		setControllerType(type);
 	}
 	
@@ -80,15 +79,13 @@ public class ControllerMap {
 			if(button != null) {
 				button.setOff(true);
 				if((type == Type.XBOX_ONE || type == Type.XBOX_360) && (buttonID == Key.LT  || buttonID == Key.RT))
-					buttons.replace(buttonID, new TriggerButton(joystick, buttonID));
+					buttons.replace(buttonID, new TriggerButton(this, buttonID));
 				else
-					buttons.replace(buttonID, new JoystickButton(joystick, buttonPorts[buttonID]));
-
-			//	SmartDashboard.putNumber("Button Selected " + buttonID, buttonPorts[buttonID]);
+					buttons.replace(buttonID, new JoystickButton(this, buttonPorts[buttonID]));
 			}
 		}
 		
-		for(MultiButton button : multiButtons)
+		for(MultiButton button : multiButtons.values())
 			button.setOff(true);
 		multiButtons.clear();
 	}
@@ -99,7 +96,7 @@ public class ControllerMap {
 			}
 		}
 		
-		for(MultiButton button : multiButtons)
+		for(MultiButton button : multiButtons.values())
 			button.setOff(true);
 		
 		multiButtons.clear();
@@ -132,26 +129,32 @@ public class ControllerMap {
 		return checkDeadZone(joystick.getRawAxis(buttonPorts[direction]));
 	}
 	
-	public Button getButton(int collector_OUT) {
-		if(buttons.get(collector_OUT) == null) {
-			if(DPadButton.isDPADButton(collector_OUT))
-				buttons.put(collector_OUT, new DPadButton(joystick, collector_OUT));
-			else if((type == Type.XBOX_ONE || type == Type.XBOX_360) && 
-					(collector_OUT == Key.LT  || collector_OUT == Key.RT))
-				buttons.put(collector_OUT, new TriggerButton(joystick, collector_OUT));
-			else
-				buttons.put(collector_OUT, new JoystickButton(joystick, buttonPorts[collector_OUT]));
+	public JoystickButton getButton(int buttonID) {
+		if(buttons.get(buttonID) == null) {
+			buttons.put(buttonID, getNewButton(buttonID));
 		}
 		
-		//if(!DPadButton.isDPADButton(buttonID))
-		//	SmartDashboard.putNumber("Button Selected " + buttonID, buttonPorts[buttonID]);
-		
-		return buttons.get(collector_OUT);
+		return buttons.get(buttonID);
+	}
+	
+	public JoystickButton getNewButton(int buttonID) {
+		if(DPadButton.isDPADButton(buttonID))
+			return new DPadButton(this, buttonID);
+		else if((type == Type.XBOX_ONE || type == Type.XBOX_360) && 
+				(buttonID == Key.LT  || buttonID == Key.RT))
+			return new TriggerButton(this, buttonID);
+		else
+			return new JoystickButton(this, buttonPorts[buttonID]);
 	}
 	
 	public Button getMultiButton(Integer... buttonID) {
 		MultiButton button = new MultiButton(this, buttonID);
-		multiButtons.add(button);
+		
+		for(Integer id : buttonID) {
+			if(multiButtons.get(id) == null)
+				multiButtons.put(id, button);
+		}
+		
 		return button;
 	}
 	
@@ -170,8 +173,10 @@ public class ControllerMap {
 	
 	public void stopRumble() {
 		joystick.setRumble(RumbleType.kLeftRumble, 0);
-		joystick.setRumble(RumbleType.kRightRumble, 1);
+		joystick.setRumble(RumbleType.kRightRumble, 0);
+	}
+	
+	public Joystick getJoystick() {
+		return joystick;
 	}
 }
-
-

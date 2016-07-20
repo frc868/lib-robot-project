@@ -12,11 +12,11 @@ public class DPadButton extends JoystickButton {
 				DOWN = 24, DOWN_LEFT = 25, LEFT = 26, UP_LEFT = 27;
 	}
    
-    public DPadButton(GenericHID joystick, int direction) {
+    public DPadButton(ControllerMap joystick, int direction) {
     	this(joystick, direction, false);
     }
     
-    public DPadButton(GenericHID joystick, int direction, boolean isEightDirectional) {
+    public DPadButton(ControllerMap joystick, int direction, boolean isEightDirectional) {
     	super(joystick);
     	this.isEightDirectional = isEightDirectional;
     	this.direction = direction;
@@ -31,7 +31,7 @@ public class DPadButton extends JoystickButton {
     	if(!isDPADButton(direction))
     		return super.get();
     	
-    	int angle = joystick.getPOV();
+    	int angle = controllerMap.getJoystick().getPOV();
     	
     	if(!isEightDirectional) {
             if (direction == Direction.LEFT) {
